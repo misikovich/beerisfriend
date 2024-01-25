@@ -1,0 +1,7 @@
+name: BeerIsFriend
+version: '${project.version}'
+main: org.misikovich.beerisfriend.BeerIsFriend
+api-version: '1.20'
+prefix: BeerIsFriend
+authors: [misikovich]
+description: A plugin to drink
