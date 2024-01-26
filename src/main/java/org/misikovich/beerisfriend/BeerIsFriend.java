@@ -1,5 +1,8 @@
 package org.misikovich.beerisfriend;
 
+import io.papermc.paper.util.Tick;
+import jdk.vm.ci.hotspot.JFR;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -10,6 +13,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.misikovich.beerisfriend.Foods.Alcohol;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +27,18 @@ public final class BeerIsFriend extends JavaPlugin implements Listener {
         Alcohol beer = new Alcohol(
                 "beer",
                 Material.POTION,
-                new PotionEffect(PotionEffectType.getById(9), 50, 3),
-                new PotionEffect(PotionEffectType.SLOW, 50, 3),
-                new PotionEffect(PotionEffectType.SLOW_DIGGING, 50, 10),
-                new PotionEffect(PotionEffectType.UNLUCK, 50, 10),
-                new PotionEffect(PotionEffectType.ABSORPTION, 30, 2),
-                new PotionEffect(PotionEffectType.WEAKNESS, 45, 3)
+                new PotionEffect(PotionEffectType.CONFUSION, sToTick(50), 3),
+                new PotionEffect(PotionEffectType.SLOW, sToTick(50), 3),
+                new PotionEffect(PotionEffectType.SLOW_DIGGING, sToTick(50), 10),
+                new PotionEffect(PotionEffectType.UNLUCK, sToTick(50), 10),
+                new PotionEffect(PotionEffectType.ABSORPTION, sToTick(30), 2),
+                new PotionEffect(PotionEffectType.WEAKNESS, sToTick(), 3)
                 );
+        new PotionEffector(false, false, false)
+                .newEffect(PotionEffectType.CONFUSION, 50, 3)
+                .newEffect(PotionEffectType.SLOW, 50, 3)
+                .newEffect(PotionEffectType.SLOW_DIGGING, 50, 10)
+                .newEffect(PotionEffectType.SLOW_DIGGING, 50, 10)
         giveableFoodSet.add(beer);
         getServer().getPluginManager().registerEvents(this, this);
         Log("success", "Loaded");
@@ -69,7 +78,9 @@ public final class BeerIsFriend extends JavaPlugin implements Listener {
         String s = "[" + prefix + "]: " + message;
         getLogger().info(s);
     }
-
+    private int sToTick(int s) {
+        return s * 20;
+    }
     @Override
     public void onDisable() {
         // Plugin shutdown logic

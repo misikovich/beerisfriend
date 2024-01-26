@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.misikovich.beerisfriend.EffectGiveableFood;
+import org.misikovich.beerisfriend.PotionEffector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,10 +13,10 @@ import java.util.Random;
 
 public class Alcohol extends EffectGiveableFood {
     private final List<String> phrases;
-    private final PotionEffect[] potionEffects;
+    private final List<PotionEffect> potionEffects;
     private final Random random;
 
-    public Alcohol(String name, Material material, PotionEffect... potionEffects) {
+    public Alcohol(String name, Material material, List<PotionEffect> potionEffects) {
         super(name, material);
 
         this.potionEffects = potionEffects;
