@@ -2,21 +2,19 @@ package org.misikovich.beerisfriend;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Objects;
 
 public abstract class EffectGiveableFood implements EffectGiveable {
-    private final String displayName;
+    private final NameWrapper displayName;
     private final Material material;
 
-    public EffectGiveableFood(String name, Material material) {
+    public EffectGiveableFood(NameWrapper name, Material material) {
         this.displayName = name;
         this.material = material;
     }
 
-    public String getDisplayName() {
+    public NameWrapper getDisplayName() {
         return displayName;
     }
 

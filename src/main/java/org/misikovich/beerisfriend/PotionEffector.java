@@ -5,23 +5,20 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PotionEffector {
-
-//    public EffectBuilder(@NotNull PotionEffectType type, int duration, int amplifier, boolean ambient, boolean particles, boolean icon) {
-//        super(type, duration, amplifier, ambient, particles, icon);
-//    }
     private boolean ambient;
     private boolean particles;
     private boolean icon;
-    private List<PotionEffect> potionEffects;
+    private final HashMap<PotionEffectType, PotionEffect> potionEffects;
 
     public PotionEffector(boolean ambient, boolean particles, boolean icon) {
         this.ambient = ambient;
         this.particles = particles;
         this.icon = icon;
-        potionEffects = new ArrayList<>();
+        potionEffects = new HashMap<>();
     }
 
     public PotionEffector setAmbient(boolean ambient) {
@@ -39,21 +36,24 @@ public class PotionEffector {
         return this;
     }
 
-    public PotionEffector newEffect(@NotNull PotionEffectType type, int durationS, int ampl) {
-        if (ifContainsType(type))
-        int durationTick = durationS * 20;
-        new PotionEffect(type, durationTick, ampl, ambient, particles, icon);
+    public PotionEffector setEffect(@NotNull PotionEffectType type, int durationS, int ampl) {
+        PotionEffect potionEffect = new PotionEffect(
+                type,
+                sToTick(durationS),
+                ampl,
+                ambient,
+                particles,
+                icon
+        );
+        potionEffects.put(type, potionEffect);
         return this;
     }
 
-    private boolean ifContainsType(PotionEffectType type) {
-        for (PotionEffect potionEffect : potionEffects) {
-            if (potionEffect.getType().equals(type)) return true;
-        }
-        return false;
+    private int sToTick(int s) {
+        return s * 20;
     }
 
     public List<PotionEffect> getPotionEffects() {
-        return potionEffects;
+        return new ArrayList<>(potionEffects.values());
     }
 }

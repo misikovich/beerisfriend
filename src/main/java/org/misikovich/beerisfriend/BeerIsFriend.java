@@ -1,47 +1,27 @@
 package org.misikovich.beerisfriend;
 
-import io.papermc.paper.util.Tick;
-import jdk.vm.ci.hotspot.JFR;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.misikovich.beerisfriend.Foods.Alcohol;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class BeerIsFriend extends JavaPlugin implements Listener {
-    List<EffectGiveableFood> giveableFoodSet;
-    static boolean DEBUG = true;
+    List<EffectGiveableFood> giveableFoodSet = new ArrayList<>();
+    static boolean DEBUG = false;
     @Override
     public void onEnable() {
         // Plugin startup logic
-        giveableFoodSet = new ArrayList<>();
-        Alcohol beer = new Alcohol(
-                "beer",
-                Material.POTION,
-                new PotionEffect(PotionEffectType.CONFUSION, sToTick(50), 3),
-                new PotionEffect(PotionEffectType.SLOW, sToTick(50), 3),
-                new PotionEffect(PotionEffectType.SLOW_DIGGING, sToTick(50), 10),
-                new PotionEffect(PotionEffectType.UNLUCK, sToTick(50), 10),
-                new PotionEffect(PotionEffectType.ABSORPTION, sToTick(30), 2),
-                new PotionEffect(PotionEffectType.WEAKNESS, sToTick(), 3)
-                );
-        new PotionEffector(false, false, false)
-                .newEffect(PotionEffectType.CONFUSION, 50, 3)
-                .newEffect(PotionEffectType.SLOW, 50, 3)
-                .newEffect(PotionEffectType.SLOW_DIGGING, 50, 10)
-                .newEffect(PotionEffectType.SLOW_DIGGING, 50, 10)
-        giveableFoodSet.add(beer);
+        initVariables();
+        // BEER LOADED
         getServer().getPluginManager().registerEvents(this, this);
-        Log("success", "Loaded");
+        Log("пиво", "Наливай!", true);
     }
 
     @EventHandler
@@ -60,7 +40,7 @@ public final class BeerIsFriend extends JavaPlugin implements Listener {
 
         for (EffectGiveableFood effectGiveableFood : giveableFoodSet) {
             Log("opd validate", "Home DisplayName: " +effectGiveableFood.getDisplayName()+ " == Event DisplayName: " + eDisplayName);
-            if (!effectGiveableFood.getDisplayName().equalsIgnoreCase(eDisplayName)) continue;
+            if (!effectGiveableFood.getDisplayName().equals(eDisplayName)) continue;
             Log("opd good", "DisplayName match!");
             Log("opd validate", "Home material: " +effectGiveableFood.getMaterial()+ " == Event material: " + eMaterial);
             Log("opd validate", String.valueOf(effectGiveableFood.getMaterial().equals(eMaterial)));
@@ -74,15 +54,37 @@ public final class BeerIsFriend extends JavaPlugin implements Listener {
     }
 
     public void Log(String prefix, String message) {
-        if (!DEBUG) return;
+        Log(prefix, message, false);
+    }
+    public void Log(String prefix, String message, boolean force) {
+        if (!DEBUG || !force) return;
         String s = "[" + prefix + "]: " + message;
         getLogger().info(s);
-    }
-    private int sToTick(int s) {
-        return s * 20;
     }
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        Log("пиво", "Закругляемся!", true);
+    }
+
+    public void initVariables() {
+        NameWrapper beerNames = new NameWrapper("beer", "pivo", "пиво", "пивко", "піво", "пиво", "півко", "кружка піва", "пузирь піва");
+        Material beerMaterial = Material.POTION;
+        PotionEffector beerEffector = new PotionEffector(false, false, false)
+                .setEffect(PotionEffectType.CONFUSION,
+                        50, 3)
+                .setEffect(PotionEffectType.SLOW,
+                        50, 3)
+                .setEffect(PotionEffectType.SLOW_DIGGING,
+                        50, 10)
+                .setEffect(PotionEffectType.UNLUCK,
+                        50, 10)
+                .setEffect(PotionEffectType.ABSORPTION,
+                        30, 5)
+                .setEffect(PotionEffectType.WEAKNESS,
+                        50, 10);
+
+        Alcohol beer = new Alcohol(beerNames, beerMaterial, beerEffector.getPotionEffects());
+        giveableFoodSet.add(beer);
     }
 }
