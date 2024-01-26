@@ -6,7 +6,7 @@
 
     <groupId>org.misikovich</groupId>
     <artifactId>BeerIsFriend</artifactId>
-    <version>1.1.0-prealpha</version>
+    <version>1.1.0-alpha</version>
     <packaging>jar</packaging>
 
     <name>BeerIsFriend</name>
